@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+  background-image: url('https://user-images.githubusercontent.com/33230300/50380394-dc432f00-0633-11e9-91f2-45ab247f22eb.png');
+  background: #000000;
+  background: -webkit-linear-gradient(to right, #0f9b0f, #000000);
+  background: linear-gradient(to right, #0f9b0f, #000000);
+
+  color: white;
+  /*background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  overflow-x: hidden;
+  padding: 15%;
+  margin: 0;
+  font-family: 'Open Sans',
+    sans-serif; */
+}
+
+h1 {
+  font-family: sans-serif;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 48px;
+  text-shadow: 5px 5px 5px black;
+}
+
+.cms-table-container {
+  font-size: 35px;
+  margin-top: 20px;
+  width: 80%;
+  margin: auto
+}
+
+.cms-table-row {
+  display: flex;
+}
+
+.cms-table-colum {
+  background-color: rgba(54, 234, 99, 0.164);
+  margin: 2px;
+  padding: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cms-name {
+  flex-basis: 20%;
+}
+
+.cms-phone {
+  flex-basis: 20%;
+}
+
+.cms-address {
+  flex-grow: 2;
+  flex-basis: 20%;
+}
+
+.cms-hedder {
+  background-color: rgba(234, 54, 68, 1);
+  font-weight: bolder;
+}
+
+.cms-edit,
+.cms-delete,
+.cms-add-entry-colum {
+  flex-basis: 5%;
+  text-align: center;
+  cursor: pointer;
+}
