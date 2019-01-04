@@ -25,18 +25,22 @@ h1 {
   text-shadow: 5px 5px 5px black;
 }
 
-.cms-table-container {
+table {
   font-size: 20px;
   margin-top: 35px;
   width: 80%;
   margin: auto
 }
 
-.cms-table-row {
+table tr {
   display: flex;
 }
 
-.cms-table-colum {
+tr.template {
+  display: none;
+}
+
+table th {
   background-color: rgba(54, 234, 99, 0.164);
   margin: 2px;
   padding: 15px;
@@ -58,7 +62,7 @@ h1 {
   flex-basis: 20%;
 }
 
-.cms-hedder {
+.cms-headder {
   background-color: rgba(234, 54, 68, 1);
   font-weight: bolder;
 }
@@ -90,7 +94,7 @@ h1 {
   width: 95%;
 }
 
-.input-err {
+input:invalid {
   background-color: red;
 }
 
@@ -125,12 +129,9 @@ button:hover {
   padding: 13px;
 }
 
-.disable-modal {
-  visibility: hidden;
-}
-
-.enable-modal {
-  visibility: visible;
+#backdrop,
+#newPersonModal {
+  display: none;
 }
 
 i {

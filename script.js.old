@@ -1,0 +1,233 @@
+const tableKey = 'cms-table';
+
+// let clearBtn = document.getElementById('clearBtn');
+let clearBtn = $('#clearBtn');
+
+clearBtn.on('click', () => {
+  localStorage.removeItem(tableKey);
+});
+
+// let cmsTable = null;
+// console.log(cmsTable);
+
+let cmsTable;
+
+
+// let cmsTableDemo = {
+//   'Lamaj Reltub': {
+//     'phone': '202-202-2020',
+//     'address': '2020 Grant Avenue, TP, MD 20912'
+//   },
+//   'Eibmeht Reltub': {
+//     'phone': '302-303-3030',
+//     'address': '3030 Work Avenue, TP, MD 30913'
+//   }
+// };
+
+//Look into validations.  
+cmsData = [{
+  Name: '',
+  Phone: '',
+  Address: ''
+}];
+
+// let enableDisableNewInput = (option) => {
+//   let newPersonName = document.getElementById('newPersonName');
+
+//   if (option === 'enable')
+//     newPersonName.disabled = false;
+//   else if (option === 'disable')
+//     newPersonName.disabled = true;
+
+// };
+
+let refreshDOMTable = () => {
+
+  let cmsTableKeys = Object.keys(cmsTable);
+  let tableContainer = $('#cmsTableContainer');
+  let oldTableBody = $('#tableBody');
+  // tableContainer.removeChild(oldTableBody);
+  oldTableBody.remove();
+  let newTableBody = $('<span/>').attr('id', 'tableBody');
+  //newTableBody.id = 'tableBody';
+  tableContainer.append(newTableBody);
+
+  let newRowTemplate = $('<div/>').addClass('cms-table-row');
+  let cols = ['name', 'phone', 'address', 'edit', 'delete'];
+  cols.forEach(col => {
+    let newRowCol = $('<div/>').addClass('cms-table-colum');
+    newRowCol.addClass(`cms-${col}`);
+    newRowTemplate.append(newRowCol);
+  });
+
+  newRowTemplate.find('.cms-edit').append($('<i/>').addClass("fas fa-edit"));
+  newRowTemplate.find('.cms-delete').append($('<i/>').addClass("fas fa-trash-alt"));
+
+
+
+
+  for (let i = 0; i < cmsTableKeys.length; i++) {
+
+    let newRow = newRowTemplate.clone(true);
+    newRow.find('.cms-name').text(cmsTableKeys[i]);
+    newRow.find('.cms-phone').text(cmsTable[cmsTableKeys[i]].phone);
+    newRow.find('.cms-address').text(cmsTable[cmsTableKeys[i]].address);
+
+    newTableBody.append(newRow);
+
+    // let currentRow = document.createElement('div');
+    // let currentNameCol = document.createElement('div');
+    // let currentPhoneCol = document.createElement('div');
+    // let currentAddressCol = document.createElement('div');
+    // let currentEditBtn = document.createElement('div');
+    // let currentDeleteBtn = document.createElement('div');
+
+    // currentRow.className = 'cms-table-row';
+    // currentNameCol.className = 'cms-table-colum cms-name';
+    // currentPhoneCol.className = 'cms-table-colum cms-phone';
+    // currentAddressCol.className = 'cms-table-colum cms-address';
+    // currentEditBtn.className = 'cms-table-colum cms-edit';
+    // currentDeleteBtn.className = 'cms-table-colum cms-delete';
+
+
+    // currentNameCol.innerHTML = cmsTableKeys[i];
+    // currentPhoneCol.innerHTML = cmsTable[cmsTableKeys[i]].phone;
+    // currentAddressCol.innerHTML = cmsTable[cmsTableKeys[i]].address;
+
+
+    // currentEditBtn.innerHTML = '<i class = "fas fa-edit"> </i>';
+    // currentDeleteBtn.innerHTML = '<i class = "fas fa-trash-alt"> </i>';
+
+    // currentRow.appendChild(currentNameCol);
+    // currentRow.appendChild(currentPhoneCol);
+    // currentRow.appendChild(currentAddressCol);
+    // currentRow.appendChild(currentEditBtn);
+    // currentRow.appendChild(currentDeleteBtn);
+    // newTableBody.appendChild(currentRow);
+  }
+
+  let enableDisableNewUserModal = (option) => {
+    let newPersonName = document.getElementById('newPersonName');
+    let newPersonPhone = document.getElementById('newPersonPhone');
+    let newPersonAddress = document.getElementById('newPersonAddress');
+    newPersonName.value = '';
+    newPersonPhone.value = '';
+    newPersonAddress.value = '';
+
+    let newPersonModal = document.getElementById('newPersonModal');
+    let backdrop = document.getElementById('backdrop');
+
+    newPersonModal.className = `${option}-modal`;
+    backdrop.className = `${option}-modal`;
+  };
+
+  let addNewEntryBtn = document.getElementById('cmsAddNewEntry');
+  let editBtns = document.getElementsByClassName('cms-edit');
+  let deleteBtns = document.getElementsByClassName('cms-delete');
+
+  let newPersonSubmitBtn = document.getElementById('newPersonSubmitBtn');
+  let newPersonCancelBtn = document.getElementById('newPersonCancelBtn');
+
+  newPersonSubmitBtn = addEventListener('click', () => {
+    let newPersonName = document.getElementById('newPersonName').value.trim();
+    let newPersonPhone = document.getElementById('newPersonPhone').value.trim();
+    let newPersonAddress = document.getElementById('newPersonAddress').value.trim();
+
+    if (newPersonName === '')
+      document.getElementById('newPersonName').className = 'input-err';
+    else document.getElementById('newPersonName').className = '';
+
+    if (newPersonPhone === '')
+      document.getElementById('newPersonPhone').classPhone = 'input-err';
+    else document.getElementById('newPersonPhone').classPhone = '';
+
+    if (newPersonAddress === '')
+      document.getElementById('newPersonAddress').classAddress = 'input-err';
+    else document.getElementById('newPersonAddress').classAddress = '';
+
+    if (newPersonName !== '' && newPersonPhone !== '' && newPersonAddress !== '') {
+      let newPerson = {
+        Name: newPersonName,
+        Phone: newPersonPhone,
+        Address: newPersonAddress
+      };
+
+      //test
+      // cmsData.push(newPerson);
+
+      cmsTable[newPersonName] = {
+        'phone': newPersonPhone,
+        'address': newPersonAddress
+      };
+      localStorage.setItem(tableKey, JSON.stringify(cmsTable));
+      enableDisableNewUserModal('disable');
+      refreshDOMTable();
+    }
+  });
+
+  newPersonCancelBtn.addEventListener('click', () => {
+    enableDisableNewUserModal('disable');
+  });
+
+  addNewEntryBtn.addEventListener('click', () => {
+    enableDisableNewUserModal('enable');
+  });
+
+
+  for (let i = 0; i < editBtns.length; i++) {
+    editBtns[i].addEventListener('click', ($event2) => {
+      let nameToEdit = $event2.target.parentElement.children[0].innerText;
+      let personToEdit = cmsTable[nameToEdit];
+      enableDisableNewUserModal('enable');
+      let newPersonName = document.getElementById('newPersonName');
+      let newPersonPhone = document.getElementById('newPersonPhone');
+      let newPersonAddress = document.getElementById('newPersonAddress');
+      newPersonName.value = nameToEdit;
+      newPersonPhone.value = personToEdit.phone;
+      newPersonAddress.value = personToEdit.address;
+      // enableDisableNewInput('disable');
+      newPersonName.attr('disabled', true);
+
+    });
+  }
+
+
+
+  for (let i = 0; i < deleteBtns.length; i++) {
+    deleteBtns[i].addEventListener('click', ($event2) => {
+      let nameTodelete = $event2.target.parentElement.children[0].innerText;
+      let isSure = window.confirm('Are you sure you want to delete Bro' + nameTodelete + '?');
+      if (isSure)
+        deleteUserFromTable(nameToDelete);
+    });
+  }
+
+};
+
+let deleteUserfromTable = (userName) => {
+  let tempTable = {};
+  let cmsTableKeys = Object.keys(cmsTable);
+  for (let i = 0; i < cmsTableKeys.length; i++)
+    if (userName !== cmsTableKeys[i]) {
+      tempTable[cmsTableKeys[i]] = cmsTable[cmsTableKeys[i]];
+    }
+
+
+  cmsTable = tempTable;
+  localStorage.setItem(tableKey, JSON.stringify(cmsTable));
+  refreshDOMTable();
+};
+
+let init = () => {
+
+  if (localStorage.getItem(tableKey)) {
+    cmsTable = JSON.parse(localStorage.getItem(tableKey));
+  } else {
+    cmsTable = {};
+    localStorage.setItem(tableKey, JSON.stringify(cmsTable));
+  }
+  refreshDOMTable();
+
+};
+
+init();
